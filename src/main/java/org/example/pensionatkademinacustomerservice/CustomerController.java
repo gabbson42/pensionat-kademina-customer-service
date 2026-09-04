@@ -2,7 +2,6 @@ package org.example.pensionatkademinacustomerservice;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,20 +14,20 @@ public class CustomerController {
     private final CustomerServiceImp customerService;
 
     @RequestMapping
-    public String allCustomers(Model model) {
-        List<CustomerDto> customerList = customerService.getAllCustomers();
-        model.addAttribute("allCustomers", customerList);
-        return "customer";
+    public List<CustomerDto> allCustomers() {
+        return customerService.getAllCustomers();
     }
 
     @PostMapping("add")
     public void addCustomer(@RequestBody String name) {
-        customerService.addCustomer(CustomerDto.builder().name(name).build());
+        customerService.addCustomer(name);
     }
 
     @PostMapping("edit/{id}")
-    public void editCustomer(@PathVariable Long id, String name) {
-        customerService.updateCustomerName(id, name);
+    public CustomerDto editCustomer(@RequestBody CustomerDto customer) {
+
+        customerService.updateCustomerName(customer.getId(), customer.getName());
+        return customerService.findCustomerById(customer.getId());
     }
 
     @PostMapping("delete/{id}")
@@ -36,6 +35,11 @@ public class CustomerController {
         String name = customerService.findCustomerById(id).getName();
         customerService.deleteCustomer(id);
         IO.print("Customer " + name +" has been deleted.");
+    }
+
+    @GetMapping("/{id}")
+    public CustomerDto findCustomerById(@PathVariable Long id) {
+        return customerService.findCustomerById(id);
     }
 
 }

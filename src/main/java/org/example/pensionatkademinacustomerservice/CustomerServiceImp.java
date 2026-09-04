@@ -31,9 +31,8 @@ public class CustomerServiceImp implements CustomerService {
 
 
     @Override
-    public void addCustomer(CustomerDto customerDto) {
-        Customer customer = customerDtoToCustomer(customerDto);
-        customerRepository.save(customer);
+    public void addCustomer(String name) {
+        customerRepository.save(Customer.builder().name(name).build());
     }
 
     @Override
@@ -50,14 +49,6 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public void deleteCustomer (Long customerId){
-
-        //Ska kolla med order service om det finns bokning på kunden innan den tar bort.
-        boolean hasBooking = bookingRepository.existsByCustomer_Id(customerId);
-
-        if (hasBooking){
-            throw new IllegalArgumentException();
-        }
-
         customerRepository.deleteById(customerId);
     }
 
