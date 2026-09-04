@@ -24,9 +24,10 @@ public class CustomerController {
     }
 
     @PostMapping("edit/{id}")
-    public CustomerDto editCustomer(@PathVariable Long id, String name) {
-        customerService.updateCustomerName(id, name);
-        return customerService.findCustomerById(id);
+    public CustomerDto editCustomer(@RequestBody CustomerDto customer) {
+
+        customerService.updateCustomerName(customer.getId(), customer.getName());
+        return customerService.findCustomerById(customer.getId());
     }
 
     @PostMapping("delete/{id}")
