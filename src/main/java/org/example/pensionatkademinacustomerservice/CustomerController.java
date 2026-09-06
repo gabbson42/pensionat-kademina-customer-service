@@ -19,11 +19,11 @@ public class CustomerController {
     }
 
     @PostMapping("add")
-    public void addCustomer(@RequestBody String name) {
-        customerService.addCustomer(name);
+    public CustomerDto addCustomer(@RequestBody String name) {
+        return customerService.addCustomer(name);
     }
 
-    @PostMapping("edit/{id}")
+    @PostMapping("edit")
     public CustomerDto editCustomer(@RequestBody CustomerDto customer) {
 
         customerService.updateCustomerName(customer.getId(), customer.getName());

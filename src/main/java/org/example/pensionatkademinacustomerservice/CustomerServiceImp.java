@@ -31,8 +31,10 @@ public class CustomerServiceImp implements CustomerService {
 
 
     @Override
-    public void addCustomer(String name) {
-        customerRepository.save(Customer.builder().name(name).build());
+    public CustomerDto addCustomer(String name) {
+        Customer customer = Customer.builder().name(name).build();
+        customerRepository.save(customer);
+        return customerToCustomerDto(customer);
     }
 
     @Override
