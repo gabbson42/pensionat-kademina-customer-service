@@ -3,6 +3,7 @@ package org.example.pensionatkademinacustomerservice;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.pensionatkademinacustomerservice.model.CustomerNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +47,8 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public CustomerDto findCustomerById(Long id) {
-        return customerToCustomerDto(customerRepository.findById(id).orElseThrow());
+        return customerToCustomerDto(customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id)));
     }
 
     @Override
