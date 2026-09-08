@@ -13,8 +13,8 @@ spec:
         app: customer-service
     spec:
       containers:
-        - name: customer-service
-          image: customer-service
+        - name: pensionat-kademina-full-project-customer-service
+          image: pensionat-kademina-full-project-customer-service
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
