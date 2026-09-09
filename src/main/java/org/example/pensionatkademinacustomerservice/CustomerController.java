@@ -2,6 +2,7 @@ package org.example.pensionatkademinacustomerservice;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class CustomerController {
     }
 
     @PostMapping("add")
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto addCustomer(@RequestBody String name) {
         return customerService.addCustomer(name);
     }
@@ -31,6 +33,7 @@ public class CustomerController {
     }
 
     @PostMapping("delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable Long id) {
         String name = customerService.findCustomerById(id).getName();
         customerService.deleteCustomer(id);
