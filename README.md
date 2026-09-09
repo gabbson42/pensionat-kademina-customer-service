@@ -91,6 +91,4 @@ kubectl apply -f k8s/customer-service.yaml
 Includes integration tests backed by Testcontainers' MySQL module, so Docker must be available to run the full test suite.
 
 ## Notes
-
-- This service currently has no description or topics set on GitHub — feel free to update the repo "About" section to link back here.
 - Purely a data-owning REST service: it has no knowledge of bookings or reviews, keeping it independently deployable.
