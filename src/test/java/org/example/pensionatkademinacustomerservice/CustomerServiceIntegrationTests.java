@@ -8,6 +8,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mysql.MySQLContainer;
@@ -67,16 +68,23 @@ public class CustomerServiceIntegrationTests {
 
     @Test
     void addCustomer() throws Exception {
-        mockMvc.perform(post("/customer/add")
+        MvcResult result = mockMvc.perform(post("/customer/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("Gabriel"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value("Gabriel"));
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id").isNumber())
+                        .andExpect(jsonPath("$.name").value("Gabriel"))
+                        .andReturn();
 
-        mockMvc.perform(get("/customer/" + 2))
+        CustomerDto createdCustomer =
+                objectMapper.readValue(
+                        result.getResponse().getContentAsString(),
+                        CustomerDto.class
+                );
+
+        mockMvc.perform(get("/customer/" + createdCustomer.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(2))
+                .andExpect(jsonPath("$.id").value(createdCustomer.getId()))
                 .andExpect(jsonPath("$.name").value("Gabriel"));
     }
 
