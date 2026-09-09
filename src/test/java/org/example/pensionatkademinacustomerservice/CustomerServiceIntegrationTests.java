@@ -1,6 +1,5 @@
 package org.example.pensionatkademinacustomerservice;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +70,13 @@ public class CustomerServiceIntegrationTests {
         mockMvc.perform(post("/customer/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("Gabriel"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("Gabriel"));
+
+        mockMvc.perform(get("/customer/" + 2))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(2))
                 .andExpect(jsonPath("$.name").value("Gabriel"));
     }
 
@@ -87,13 +91,18 @@ public class CustomerServiceIntegrationTests {
                 .andExpect(jsonPath("$.id").value(savedCustomer.getId()))
                 .andExpect(jsonPath("$.name").value("Gabriel"));
 
+        mockMvc.perform(get("/customer/" + savedCustomer.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(savedCustomer.getId()))
+                .andExpect(jsonPath("$.name").value("Gabriel"));
+
     }
 
     @Test
     void deleteCustomer() throws Exception {
 
         mockMvc.perform(post("/customer/delete/" + savedCustomer.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/customer/" + savedCustomer.getId()))
                 .andExpect(status().isNotFound());
