@@ -48,9 +48,3 @@ jobs:
       - name: push to docker hub
         run: |
           docker push ${{secrets.DOCKERHUB_USERNAME}}/customer-service:${{github.run_number}}
-
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/customer_db
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: gabbe123
-#test
